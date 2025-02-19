@@ -1,166 +1,60 @@
 
-import { useState, useEffect } from "react";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { FontControls } from "@/components/FontControls";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  const [text, setText] = useState("");
-  const [isReading, setIsReading] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
-  const [fontFamily, setFontFamily] = useState("sans");
-  const [fontWidth, setFontWidth] = useState(400);
-  const [lineSpacing, setLineSpacing] = useState(1.5);
-  const [wordSpacing, setWordSpacing] = useState(0);
-
-  useEffect(() => {
-    const savedPreferences = localStorage.getItem("reader-preferences");
-    if (savedPreferences) {
-      const { 
-        fontSize: savedFontSize, 
-        fontFamily: savedFontFamily,
-        fontWidth: savedFontWidth,
-        lineSpacing: savedLineSpacing,
-        wordSpacing: savedWordSpacing
-      } = JSON.parse(savedPreferences);
-      
-      setFontSize(savedFontSize);
-      setFontFamily(savedFontFamily);
-      setFontWidth(savedFontWidth);
-      setLineSpacing(savedLineSpacing);
-      setWordSpacing(savedWordSpacing);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(
-      "reader-preferences",
-      JSON.stringify({ 
-        fontSize, 
-        fontFamily,
-        fontWidth,
-        lineSpacing,
-        wordSpacing
-      })
-    );
-  }, [fontSize, fontFamily, fontWidth, lineSpacing, wordSpacing]);
-
-  useEffect(() => {
-    const handleKeyboard = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        if (e.key === "+" || e.key === "=") {
-          e.preventDefault();
-          setFontSize((prev) => prev + 1);
-        } else if (e.key === "-") {
-          e.preventDefault();
-          setFontSize((prev) => Math.max(12, prev - 1));
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyboard);
-    return () => window.removeEventListener("keydown", handleKeyboard);
-  }, []);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
-    toast.success("Text copied to clipboard");
-  };
-
-  const handleSubmit = () => {
-    if (text.trim()) {
-      setIsReading(true);
-    }
-  };
+  const navigate = useNavigate();
 
   return (
-    <div className={`min-h-screen bg-reader-light dark:bg-reader-dark sepia:bg-reader-sepia transition-colors duration-300`}>
+    <div className="min-h-screen bg-reader-light dark:bg-reader-dark sepia:bg-reader-sepia transition-colors duration-300">
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
 
-      {isReading && (
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsReading(false)}
-          className="fixed top-4 left-4 z-50 rounded-full"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-      )}
+      <div className="container max-w-3xl mx-auto px-4 py-16">
+        <div className="space-y-8 text-center">
+          <h1 className="text-4xl font-bold tracking-tight">Welcome to Cozy Read Space</h1>
+          
+          <p className="text-lg text-muted-foreground">
+            A comfortable reading environment for your text content
+          </p>
 
-      <div className="reader-container">
-        {!isReading ? (
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="bg-background/50 backdrop-blur-sm p-4 rounded-lg border shadow-sm">
-              <Textarea
-                placeholder="Paste or type your text here..."
-                className="min-h-[200px] text-base resize-y bg-transparent border-none focus:ring-0"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              />
-              <div className="mt-2 flex justify-end gap-2">
-                {text && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleCopy}
-                    className="text-sm"
-                  >
-                    Copy text
-                  </Button>
-                )}
-                <Button
-                  size="sm"
-                  onClick={handleSubmit}
-                  className="text-sm"
-                  disabled={!text.trim()}
-                >
-                  Start reading
-                </Button>
-              </div>
+          <div className="space-y-6 text-left bg-background/50 backdrop-blur-sm p-6 rounded-lg border">
+            <h2 className="text-2xl font-semibold">How to use:</h2>
+            
+            <ol className="space-y-4 list-decimal list-inside text-base">
+              <li>Paste or type your text in the input box</li>
+              <li>Click "Start reading" to enter reading mode</li>
+              <li>Customize your reading experience with the tools at the bottom:
+                <ul className="pl-6 mt-2 space-y-2 list-disc list-inside">
+                  <li>Adjust font size using the + and - buttons</li>
+                  <li>Choose between Sans-serif, Serif, or Monospace fonts</li>
+                  <li>Modify font weight for comfortable reading</li>
+                  <li>Adjust line height and word spacing</li>
+                </ul>
+              </li>
+              <li>Use the back button to return to the input page at any time</li>
+            </ol>
+
+            <div className="mt-8">
+              <p className="text-sm text-muted-foreground mb-4">
+                Tip: You can also use Ctrl/Cmd + and - to adjust font size while reading
+              </p>
             </div>
           </div>
-        ) : (
-          <div
-            className={`prose max-w-none animate-fade-in mx-auto px-4
-                       ${fontFamily === "sans" ? "font-sans" : ""}
-                       ${fontFamily === "serif" ? "font-serif" : ""}
-                       ${fontFamily === "mono" ? "font-mono" : ""}`}
-            style={{ 
-              fontSize: `${fontSize}px`,
-              fontWeight: fontWidth,
-              lineHeight: lineSpacing,
-              wordSpacing: `${wordSpacing}em`,
-            }}
-          >
-            {text.split("\n").map((paragraph, index) => (
-              <p key={index} className="mb-4">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        )}
-      </div>
 
-      {isReading && text && (
-        <FontControls
-          fontSize={fontSize}
-          setFontSize={setFontSize}
-          fontFamily={fontFamily}
-          setFontFamily={setFontFamily}
-          fontWidth={fontWidth}
-          setFontWidth={setFontWidth}
-          lineSpacing={lineSpacing}
-          setLineSpacing={setLineSpacing}
-          wordSpacing={wordSpacing}
-          setWordSpacing={setWordSpacing}
-        />
-      )}
+          <Button
+            onClick={() => navigate("/reader")}
+            size="lg"
+            className="gap-2"
+          >
+            Start Reading
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
