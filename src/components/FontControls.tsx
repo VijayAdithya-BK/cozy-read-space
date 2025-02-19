@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { 
   MinusIcon, 
@@ -46,7 +45,7 @@ export const FontControls = ({
   };
 
   return (
-    <div className="font-controls animate-fade-in">
+    <div className="font-controls transition-all duration-200 hover:bg-background group-hover:backdrop-blur-xl opacity-60 hover:opacity-100">
       <Button
         variant="ghost"
         size="icon"

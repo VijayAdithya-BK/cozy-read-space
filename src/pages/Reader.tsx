@@ -86,19 +86,19 @@ const Reader = () => {
 
       {isReading ? (
         <Button
-          variant="ghost"
+          variant="secondary"
           size="icon"
           onClick={() => setIsReading(false)}
-          className="fixed top-4 left-4 z-50 rounded-full"
+          className="fixed top-4 left-4 z-50 rounded-full shadow-lg bg-background/80 backdrop-blur-sm hover:bg-background transition-all duration-200"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
       ) : (
         <Button
-          variant="ghost"
+          variant="secondary"
           size="icon"
           onClick={() => navigate("/")}
-          className="fixed top-4 left-4 z-50 rounded-full"
+          className="fixed top-4 left-4 z-50 rounded-full shadow-lg bg-background/80 backdrop-blur-sm hover:bg-background transition-all duration-200"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
