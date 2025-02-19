@@ -4,9 +4,9 @@ import {
   MinusIcon, 
   PlusIcon, 
   Type as TypeIcon,
-  TextWidth,
+  StretchHorizontal,
   MoveVertical,
-  Separator
+  GripHorizontal
 } from "lucide-react";
 import { 
   Select,
@@ -84,7 +84,7 @@ export const FontControls = ({
       <div className="h-6 w-px bg-border mx-2" />
 
       <div className="flex items-center gap-2">
-        <TextWidth className="h-4 w-4" />
+        <StretchHorizontal className="h-4 w-4" />
         <input
           type="range"
           min="300"
@@ -114,7 +114,7 @@ export const FontControls = ({
       <div className="h-6 w-px bg-border mx-2" />
 
       <div className="flex items-center gap-2">
-        <Separator className="h-4 w-4" />
+        <GripHorizontal className="h-4 w-4" />
         <input
           type="range"
           min="0"
