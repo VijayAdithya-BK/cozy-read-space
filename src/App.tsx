@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import Index from "@/pages/Index";
 import Reader from "@/pages/Reader";
